@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 export HOME=/home/vagrant
-export IDEA_IC_VERSION=idea-IC-171.4694.70
+export IDEA_IC_VERSION=ideaIC-2018.3.2
 export SET_VAGRANT_AS_OWNER="sudo chown -R vagrant:vagrant /home/vagrant"
 export FLYWAY_VERSION=4.2.0
 
@@ -83,12 +83,12 @@ flyway  -baselineOnMigrate=true -url=jdbc:mysql://localhost/ -schemas=blog -user
 # Ide
 cd ~/Downloads/ 
 if [[ ! -d ./$IDEA_IC_VERSION ]]; then
-    wget -q https://download.jetbrains.com/idea/ideaIC-2017.1.5-no-jdk.tar.gz
-    tar xzf ideaIC-2017.1.5-no-jdk.tar.gz
-    #ln -s /home/vagrant/Downloads/$IDEA_IC_VERSION/bin/idea.sh ~/Desktop/idea.sh
+    wget -q https://download.jetbrains.com/idea/$IDEA_IC_VERSION.tar.gz
+    mkdir $IDEA_IC_VERSION
+    tar xzf $IDEA_IC_VERSION.tar.gz --strip-components 1 -C ./$IDEA_IC_VERSION/
     echo -e "[Desktop Entry]\n" \
     "Name=Idea\n" \
-    "GenericName=IntelliJ Idea\n" \vb.gui = true
+    "GenericName=IntelliJ Idea\n" \
     "Comment=Edit text files\n" \
     "Exec=/home/vagrant/Downloads/$IDEA_IC_VERSION/bin/idea.sh %F\n" \
     "Terminal=false\n" \
