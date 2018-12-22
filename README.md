@@ -1,5 +1,5 @@
-# Vagrant-SimpleBlog
-A Vagrant based virtual environment for the SimpleBlog demo application (Alten IT - Core team Agile).
+# Test-Development Environment in Vagrant
+A Vagrant based virtual environment for the Springmvc-Shoppingcart demo application (Alten IT - SL-Test-DevProg).
 
 # Instructions for getting started with Vagrant
 ## Prerequisites
@@ -14,8 +14,9 @@ A Vagrant based virtual environment for the SimpleBlog demo application (Alten I
 
 ## Open the Virtual machine (debian 8)
 - The default username and password is vagrant 
-- Firefox should be installed, navigate to http://localhost:8088/blog/index.xhtml and see the blog.
-- use admin/admin to login to the blog
+- Firefox should be installed
+- IntelliJ should be installed
+- Shortcut to start the Demo app and Idea should be present on the desktop (note that the desktop icons are hidden by default on Gnome)
 
 ## Support 
 - In case of any questions or concerns regarding this VM please contact eric.de.graaf@alten.nl
