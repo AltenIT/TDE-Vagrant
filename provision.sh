@@ -4,6 +4,8 @@ export HOME=/home/vagrant
 export IDEA_IC_VERSION=ideaIC-2018.3.2
 export SET_VAGRANT_AS_OWNER="sudo chown -R vagrant:vagrant /home/vagrant"
 export FLYWAY_VERSION=4.2.0
+export SUT_GIT_URL=https://github.com/AltenIT/springmvc-shoppingcart-sample.git
+export SUT_NAME=springmvc-shoppingcart-sample
 
 echo  provisioning the Virtual machine
 
@@ -27,42 +29,24 @@ debconf-set-selections <<< 'mysql-server mysql-server/root_password_again passwo
 sudo apt-get install -y --force-yes mysql-server
 sudo dpkg --configure -a
 
-if [[ ! -d ./SimpleBlog ]]; then
-    echo  SimpleBlog directory does not exist create it.
-    git clone https://github.com/endegraaf/SimpleBlog.git
+if [[ ! -d ./springmvc-shoppingcart-sample ]]; then
+    echo  springmvc-shoppingcart-sample directory does not exist create it.
+    git clone $SUT_GIT_URL
 else
-    cd SimpleBlog
+    cd springmvc-shoppingcart-sample
     git pull
     cd $HOME
 fi
 
 $SET_VAGRANT_AS_OWNER
 
-# Flyway
-echo  Install Flyway version $FLYWAY_VERSION database migration
 cd $HOME
-if [[ ! -d ./Flyway ]]; then
-    mkdir Flyway && cd Flyway
-    wget -q https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/$FLYWAY_VERSION/flyway-commandline-$FLYWAY_VERSION-linux-x64.tar.gz
-    tar xzf flyway-commandline-4.2.0-linux-x64.tar.gz
-fi
-export PATH=$PATH:$HOME/Flyway/flyway-$FLYWAY_VERSION
-
-# spring-security-facelets-taglib mirror
-cd $HOME
-if [[ ! -d ./spring-security-facelets-taglib ]]; then
-    git clone https://github.com/domdorn/spring-security-facelets-taglib.git
-fi
-cd spring-security-facelets-taglib
-mvn clean install -DskipTests #skip tests because of the embedded selenium one.
-
-cd $HOME
-# SimpleBlog code
-if [[ ! -d ./SimpleBlog ]]; then
-    git clone https://github.com/endegraaf/SimpleBlog.git
+# springmvc-shoppingcart-sample code
+if [[ ! -d ./springmvc-shoppingcart-sample ]]; then
+    git clone $SUT_GIT_URL
 fi
 
-cd SimpleBlog
+cd springmvc-shoppingcart-sample
 git pull
 
 cd $HOME && $SET_VAGRANT_AS_OWNER
@@ -75,10 +59,7 @@ mysql --user=root --password=vagrant --execute="GRANT USAGE ON *.* TO 'bloguser'
 mysql --user=root --password=vagrant --execute="CREATE USER 'bloguser'@'localhost' IDENTIFIED BY 'blogpassword';"
 mysql --user=root --password=vagrant --execute="GRANT ALL PRIVILEGES ON blog.* TO 'bloguser'@'localhost' WITH GRANT OPTION;"
 
-cd $HOME && cd SimpleBlog
-
-flyway  -baselineOnMigrate=true -url=jdbc:mysql://localhost/ -schemas=blog -user=bloguser -password=blogpassword -locations=filesystem:src/main/resources/db/migration/ migrate
-
+cd $HOME && cd springmvc-shoppingcart-sample
 
 # Ide
 cd ~/Downloads/ 
@@ -100,27 +81,27 @@ fi
 
 cd $HOME && $SET_VAGRANT_AS_OWNER
 
-cd $HOME && cd SimpleBlog
+cd $HOME && cd springmvc-shoppingcart-sample/shoppingcart
 mvn clean install
 
 echo -e "#!/bin/sh\n" \
-"cd /home/vagrant/SimpleBlog\n" \
-"mvn tomcat7:run-war" > ~/Start-SimpleBlog.sh
+"cd /home/vagrant/springmvc-shoppingcart-sample/shoppingcart\n" \
+"mvn clean jetty:run" > ~/Start-springmvc-shoppingcart-sample.sh
 
-chmod +x ~/Start-SimpleBlog.sh
+chmod +x ~/Start-springmvc-shoppingcart-sample.sh
 
 
 echo -e "[Desktop Entry]\n" \
-    "Name=Run SimpleBlog\n" \
-    "GenericName=SimpleBlog\n" \
-    "Exec=/home/vagrant/Start-SimpleBlog.sh %F\n" \
+    "Name=Run springmvc-shoppingcart-sample\n" \
+    "GenericName=springmvc-shoppingcart-sample\n" \
+    "Exec=/home/vagrant/Start-springmvc-shoppingcart-sample.sh %F\n" \
     "Terminal=true\n" \
     "Type=Application\n" \
     "Icon=" \
     "Categories=" \
-    "StartupNotify=false" > ~/Desktop/Start-SimpleBlog.desktop
+    "StartupNotify=false" > ~/Desktop/Start-springmvc-shoppingcart-sample.desktop
 
-chmod +x ~/Desktop/Start-SimpleBlog.desktop
+chmod +x ~/Desktop/Start-springmvc-shoppingcart-sample.desktop
 
 cp -r /root/.m2 /home/vagrant
 
