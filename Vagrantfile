@@ -1,5 +1,5 @@
 Vagrant.configure("2") do |config|
-  config.vm.box = "box-cutter/debian8-desktop"
+  config.vm.box = "endegraaf/debian8-desktop"
   config.vm.provider "virtualbox" do |vb|
     # Display the VirtualBox GUI when booting the machine
     vb.gui = true
