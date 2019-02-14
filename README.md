@@ -1,5 +1,5 @@
 # Test-Development Environment in Vagrant
-A Vagrant based virtual environment for the Springmvc-Shoppingcart demo application (Alten IT - SL-Test-DevProg).
+A Vagrant based virtual environment for the Springmvc-Shoppingcart demo application (Alten Java for Testers programme).
 
 # Instructions for getting started with Vagrant
 ## Prerequisites
@@ -9,7 +9,8 @@ A Vagrant based virtual environment for the Springmvc-Shoppingcart demo applicat
 ## Start the Vagrant Virtual Machine
 - Clone this repo
 - Go into the local repository from the step above
-- vagrant up --provider=virtualbox
+- Checkout the shoppingcart brach
+- run `vagrant up --provider=virtualbox`
 - Now wait for the process to complete
 
 ## Open the Virtual machine (debian 8)
