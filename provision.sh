@@ -33,8 +33,8 @@ sudo dpkg --configure -a
 if [[ -d ./springmvc-shoppingcart-sample ]]; then
 	echo "Remove old dir in image."
 	rm -rf springmvc-shoppingcart-sample
-	git clone $SUT_GIT_URL
 fi
+git clone $SUT_GIT_URL
 $SET_VAGRANT_AS_OWNER
 cd springmvc-shoppingcart-sample
 
