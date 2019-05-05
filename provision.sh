@@ -30,37 +30,13 @@ debconf-set-selections <<< 'mysql-server mysql-server/root_password_again passwo
 sudo apt-get install -y --force-yes mysql-server
 sudo dpkg --configure -a
 
-if [[ ! -d ./springmvc-shoppingcart-sample ]]; then
-    echo  springmvc-shoppingcart-sample directory does not exist create it.
-    git clone $SUT_GIT_URL
-else
-    cd springmvc-shoppingcart-sample
-    git pull
-    cd $HOME
+if [[ -d ./springmvc-shoppingcart-sample ]]; then
+	echo "Remove old dir in image."
+	rm -rf springmvc-shoppingcart-sample
+	git clone $SUT_GIT_URL
 fi
-
 $SET_VAGRANT_AS_OWNER
-
-cd $HOME
-# springmvc-shoppingcart-sample code
-if [[ ! -d ./springmvc-shoppingcart-sample ]]; then
-    git clone $SUT_GIT_URL
-fi
-
 cd springmvc-shoppingcart-sample
-git pull
-
-cd $HOME && $SET_VAGRANT_AS_OWNER
-
-
-# Mysql Local database
-echo Create a local Database
-mysql --user=root --password=vagrant --execute="DROP DATABASE if exists blog; CREATE DATABASE blog CHARACTER SET utf8;"
-mysql --user=root --password=vagrant --execute="GRANT USAGE ON *.* TO 'bloguser'@'localhost';DROP USER 'bloguser'@'localhost';"
-mysql --user=root --password=vagrant --execute="CREATE USER 'bloguser'@'localhost' IDENTIFIED BY 'blogpassword';"
-mysql --user=root --password=vagrant --execute="GRANT ALL PRIVILEGES ON blog.* TO 'bloguser'@'localhost' WITH GRANT OPTION;"
-
-cd $HOME && cd springmvc-shoppingcart-sample
 
 # Ide
 cd ~/Downloads/ 
@@ -82,15 +58,13 @@ fi
 
 cd $HOME && $SET_VAGRANT_AS_OWNER
 
-cd $HOME && cd springmvc-shoppingcart-sample/shoppingcart
 mvn clean install
 
 echo -e "#!/bin/sh\n" \
-"cd /home/vagrant/springmvc-shoppingcart-sample/shoppingcart\n" \
+"cd /home/vagrant/springmvc-shoppingcart-sample/\n" \
 "mvn clean jetty:run" > ~/Start-springmvc-shoppingcart-sample.sh
 
 chmod +x ~/Start-springmvc-shoppingcart-sample.sh
-
 
 echo -e "[Desktop Entry]\n" \
     "Name=Run springmvc-shoppingcart-sample\n" \
