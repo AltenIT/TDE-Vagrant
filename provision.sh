@@ -37,6 +37,7 @@ fi
 git clone $SUT_GIT_URL
 $SET_VAGRANT_AS_OWNER
 cd springmvc-shoppingcart-sample
+mvn clean install
 
 # Ide
 cd ~/Downloads/ 
@@ -55,10 +56,6 @@ if [[ ! -d ./$IDEA_IC_VERSION ]]; then
     "Categories=Programming;IDE;\n" \
     "StartupNotify=true" > ~/Desktop/Idea.desktop
 fi
-
-cd $HOME && $SET_VAGRANT_AS_OWNER
-
-mvn clean install
 
 echo -e "#!/bin/sh\n" \
 "cd /home/vagrant/springmvc-shoppingcart-sample/\n" \
