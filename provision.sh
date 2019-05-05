@@ -14,6 +14,7 @@ echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" | su
 echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
 echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
+head -n -2 /etc/apt/sources.list > /etc/apt/sources.text ; cd /etc/apt/ ; mv sources.text sources.list
 sudo apt-get update
 sudo apt-get install -y build-essential
 sudo apt-get install -y libmysqlclient-dev
