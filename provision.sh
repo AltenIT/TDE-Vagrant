@@ -5,6 +5,7 @@ export IDEA_IC_VERSION=ideaIC-2018.3.2
 export SET_VAGRANT_AS_OWNER="sudo chown -R vagrant:vagrant /home/vagrant"
 export TOMCAT_VERSION=8.5.40
 export TOMCAT_DL_URL=http://apache.proserve.nl/tomcat/tomcat-8/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
+export CHROME_PACKAGE=google-chrome-stable_current_amd64.deb
 export GIT_BASE_URL=https://github.com/AltenIT
 export SUT_NAME=springmvc-shoppingcart-sample
 export APITEST_NAME=Rest-Assured 
@@ -39,7 +40,6 @@ if [[ -d ./$SUT_NAME ]]; then
 	rm -rf $SUT_NAME
 fi
 git clone $SUT_GIT_URL
-$SET_VAGRANT_AS_OWNER
 cd $SUT_NAME
 mvn clean install
 cd ~ 
@@ -51,7 +51,6 @@ if [[ -d ./$APITEST_NAME ]]; then
 fi
 git clone $APITEST_GIT_URL && cd $APITEST_NAME
 mvn clean compile
-$SET_VAGRANT_AS_OWNER
 cd ~ 
 
 # Install GUI test #
@@ -61,28 +60,45 @@ if [[ -d ./$GUITEST_NAME ]]; then
 fi
 git clone $GUITEST_GIT_URL && cd $GUITEST_NAME
 mvn clean compile
-$SET_VAGRANT_AS_OWNER
 cd ~ 
+
+$SET_VAGRANT_AS_OWNER
 
 # Install Chrome
 cd ~/Downloads
-wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+if [[ ! -f $CHROME_PACKAGE ]]; then
+	echo "Download Chrome"
+	wget -q https://dl.google.com/linux/direct/$CHROME_PACKAGE
+fi
 dpkg -i ./google-chrome-stable_current_amd64.deb
 cd ~ 
 
 #Tomcat
-cd ~/Downloads
 if [[ ! -d ~/Apps ]]; then
 	mkdir ~/Apps	
 fi
 cd ~/Apps
 if [[ ! -d ./$TOMCAT_VERSION ]]; then
 		echo "Create Tomcat directory"
-		wget -q $TOMCAT_DL_URL
+		if [[ ! -f apache-tomcat-$TOMCAT_VERSION.tar.gz ]]; then
+			wget -q $TOMCAT_DL_URL
+		fi
 		tar xzf apache-tomcat-$TOMCAT_VERSION.tar.gz
 fi
 export CATALINA_HOME=$HOME/Apps/apache-tomcat-$TOMCAT_VERSION
 cd ~
+
+#Jenkins
+cd ~/Downloads
+if [[ ! -f jenkins.war ]]; then 
+	wget -q http://mirrors.jenkins.io/war-stable/latest/jenkins.war
+fi
+if [[ -f $CATALINA_HOME/webapps/jenkins.war ]]; then
+	rm $CATALINA_HOME/webapps/jenkins.war
+fi
+mv jenkins.war $CATALINA_HOME/webapps
+# start tomcat 
+$CATALINA_HOME/bin/startup.sh
 
 # Ide
 if [[ $DEPLOY_IDE ]]; then
@@ -105,13 +121,6 @@ if [[ $DEPLOY_IDE ]]; then
 fi
 cd ~ 
 
-#Jenkins, use install from: https://jenkins.io/doc/book/installing/
-#wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
-#sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
-#apt-get -y update
-#apt-get -y install jenkins
-
-
 echo -e "#!/bin/sh\n" \
 "cd /home/vagrant/$SUT_NAME/\n" \
 "mvn clean jetty:run" > ~/Start-$SUT_NAME.sh
@@ -132,7 +141,7 @@ chmod +x ~/Desktop/Start-$SUT_NAME.desktop
 
 cp -r /root/.m2 /home/vagrant
 
-chown -R vagrant:vagrant /home/vagrant
+$SET_VAGRANT_AS_OWNER
 
 
 
