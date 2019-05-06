@@ -3,9 +3,17 @@ set -e
 export HOME=/home/vagrant
 export IDEA_IC_VERSION=ideaIC-2018.3.2
 export SET_VAGRANT_AS_OWNER="sudo chown -R vagrant:vagrant /home/vagrant"
-export FLYWAY_VERSION=4.2.0
-export SUT_GIT_URL=https://github.com/AltenIT/springmvc-shoppingcart-sample.git
+export TOMCAT_VERSION=8.5.40
+export TOMCAT_DL_URL=http://apache.proserve.nl/tomcat/tomcat-8/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
+export GIT_BASE_URL=https://github.com/AltenIT
 export SUT_NAME=springmvc-shoppingcart-sample
+export APITEST_NAME=Rest-Assured 
+export GUITEST_NAME=SeleniumBDD
+#Compute correct git urls
+export SUT_GIT_URL=$GIT_BASE_URL/$SUT_NAME.git
+export APITEST_GIT_URL=$GIT_BASE_URL/$APITEST_NAME.git
+export GUITEST_GIT_URL=$GIT_BASE_URL/$GUITEST_NAME.git
+export DEPLOY_IDE=false
 
 echo  provisioning the Virtual machine
 
@@ -13,67 +21,114 @@ echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" | sudo t
 echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" | sudo tee -a /etc/apt/sources.list.d/webupd8team-java.list
 echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
 echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
 head -n -2 /etc/apt/sources.list > /etc/apt/sources.text ; cd /etc/apt/ ; mv sources.text sources.list
-sudo apt-get update
-sudo apt-get install -y build-essential
-sudo apt-get install -y libmysqlclient-dev
-sudo apt-get install -y git
-sudo apt-get install -y firefox-esr #browsers #sudo apt-get install -y google-chrome-stable
-sudo apt-get install -y oracle-java8-installer
-sudo apt-get install -y oracle-java8-set-default
-sudo apt-get install -y maven
+apt-get update
+apt-get install -y build-essential
+apt-get install -y libmysqlclient-dev
+apt-get install -y git
+apt-get install -y firefox-esr #browsers 
+apt-get install -y oracle-java8-installer
+apt-get install -y oracle-java8-set-default
+apt-get install -y maven
+apt-get install -y libappindicator3-1 
 
-#mysql password
-debconf-set-selections <<< 'mysql-server mysql-server/root_password password vagrant'
-debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password vagrant'
-sudo apt-get install -y --force-yes mysql-server
-sudo dpkg --configure -a
-
-if [[ -d ./springmvc-shoppingcart-sample ]]; then
-	echo "Remove old dir in image."
-	rm -rf springmvc-shoppingcart-sample
+# Install SUT #
+if [[ -d ./$SUT_NAME ]]; then
+	echo "Remove old dir in image. " + $SUT_NAME
+	rm -rf $SUT_NAME
 fi
 git clone $SUT_GIT_URL
 $SET_VAGRANT_AS_OWNER
-cd springmvc-shoppingcart-sample
+cd $SUT_NAME
 mvn clean install
+cd ~ 
+
+# Install API test #
+if [[ -d ./$APITEST_NAME ]]; then
+	echo "Remove old dir in image. " + $APITEST_NAME 
+	rm -rf $APITEST_NAME
+fi
+git clone $APITEST_GIT_URL && cd $APITEST_NAME
+mvn clean compile
+$SET_VAGRANT_AS_OWNER
+cd ~ 
+
+# Install GUI test #
+if [[ -d ./$GUITEST_NAME ]]; then
+	echo "Remove old dir in image. " + $GUITEST_NAME
+	rm -rf $GUITEST_NAME
+fi
+git clone $GUITEST_GIT_URL && cd $GUITEST_NAME
+mvn clean compile
+$SET_VAGRANT_AS_OWNER
+cd ~ 
+
+# Install Chrome
+cd ~/Downloads
+wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+dpkg -i ./google-chrome-stable_current_amd64.deb
+cd ~ 
+
+#Tomcat
+cd ~/Downloads
+if [[ ! -d ~/Apps ]]; then
+	mkdir ~/Apps	
+fi
+cd ~/Apps
+if [[ ! -d ./$TOMCAT_VERSION ]]; then
+		echo "Create Tomcat directory"
+		wget -q $TOMCAT_DL_URL
+		tar xzf apache-tomcat-$TOMCAT_VERSION.tar.gz
+fi
+export CATALINA_HOME=$HOME/Apps/apache-tomcat-$TOMCAT_VERSION
+cd ~
 
 # Ide
-cd ~/Downloads/ 
-if [[ ! -d ./$IDEA_IC_VERSION ]]; then
-    wget -q https://download.jetbrains.com/idea/$IDEA_IC_VERSION.tar.gz
-    mkdir $IDEA_IC_VERSION
-    tar xzf $IDEA_IC_VERSION.tar.gz --strip-components 1 -C ./$IDEA_IC_VERSION/
-    echo -e "[Desktop Entry]\n" \
-    "Name=Idea\n" \
-    "GenericName=IntelliJ Idea\n" \
-    "Comment=Edit text files\n" \
-    "Exec=/home/vagrant/Downloads/$IDEA_IC_VERSION/bin/idea.sh %F\n" \
-    "Terminal=false\n" \
-    "Type=Application\n" \
-    "Icon=/home/vagrant/Downloads/$IDEA_IC_VERSION/bin/idea.png\n" \
-    "Categories=Programming;IDE;\n" \
-    "StartupNotify=true" > ~/Desktop/Idea.desktop
+if [[ $DEPLOY_IDE ]]; then
+	cd ~/Downloads/ 
+	if [[ ! -d ./$IDEA_IC_VERSION ]]; then
+	    wget -q https://download.jetbrains.com/idea/$IDEA_IC_VERSION.tar.gz
+	    mkdir $IDEA_IC_VERSION
+	    tar xzf $IDEA_IC_VERSION.tar.gz --strip-components 1 -C ./$IDEA_IC_VERSION/
+	    echo -e "[Desktop Entry]\n" \
+	    "Name=Idea\n" \
+	    "GenericName=IntelliJ Idea\n" \
+	    "Comment=Edit text files\n" \
+	    "Exec=/home/vagrant/Downloads/$IDEA_IC_VERSION/bin/idea.sh %F\n" \
+	    "Terminal=false\n" \
+	    "Type=Application\n" \
+	    "Icon=/home/vagrant/Downloads/$IDEA_IC_VERSION/bin/idea.png\n" \
+	    "Categories=Programming;IDE;\n" \
+	    "StartupNotify=true" > ~/Desktop/Idea.desktop
+	fi
 fi
+cd ~ 
+
+#Jenkins, use install from: https://jenkins.io/doc/book/installing/
+#wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+#sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+#apt-get -y update
+#apt-get -y install jenkins
+
 
 echo -e "#!/bin/sh\n" \
-"cd /home/vagrant/springmvc-shoppingcart-sample/\n" \
-"mvn clean jetty:run" > ~/Start-springmvc-shoppingcart-sample.sh
+"cd /home/vagrant/$SUT_NAME/\n" \
+"mvn clean jetty:run" > ~/Start-$SUT_NAME.sh
 
-chmod +x ~/Start-springmvc-shoppingcart-sample.sh
+chmod +x ~/Start-$SUT_NAME.sh
 
 echo -e "[Desktop Entry]\n" \
-    "Name=Run springmvc-shoppingcart-sample\n" \
-    "GenericName=springmvc-shoppingcart-sample\n" \
-    "Exec=/home/vagrant/Start-springmvc-shoppingcart-sample.sh %F\n" \
+    "Name=Run $SUT_NAME\n" \
+    "GenericName=$SUT_NAME\n" \
+    "Exec=/home/vagrant/Start-$SUT_NAME.sh %F\n" \
     "Terminal=true\n" \
     "Type=Application\n" \
     "Icon=" \
     "Categories=" \
-    "StartupNotify=false" > ~/Desktop/Start-springmvc-shoppingcart-sample.desktop
+    "StartupNotify=false" > ~/Desktop/Start-$SUT_NAME.desktop
 
-chmod +x ~/Desktop/Start-springmvc-shoppingcart-sample.desktop
+chmod +x ~/Desktop/Start-$SUT_NAME.desktop
 
 cp -r /root/.m2 /home/vagrant
 
