@@ -3,7 +3,7 @@ A Vagrant based virtual environment for the Springmvc-Shoppingcart demo applicat
 
 # Instructions for getting started with Vagrant
 ## Prerequisites
-- Oracle VirtualBox
+- Oracle VirtualBox https://www.virtualbox.org/
 - Vagrant https://www.vagrantup.com/downloads.html
 
 ## Start the Vagrant Virtual Machine
