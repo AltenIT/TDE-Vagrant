@@ -27,3 +27,6 @@ A Vagrant based virtual environment for the Springmvc-Shoppingcart demo applicat
 
 ## Support 
 - In case of any questions or concerns regarding this VM please contact eric.de.graaf@alten.nl
+
+## Todo
+- Add Sonarcube
