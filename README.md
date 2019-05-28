@@ -30,3 +30,5 @@ A Vagrant based virtual environment for the Springmvc-Shoppingcart demo applicat
 
 ## Todo
 - Add Sonarcube
+- 1st time config of Jenkins
+- Add Postman
