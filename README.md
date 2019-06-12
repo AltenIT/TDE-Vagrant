@@ -1,6 +1,12 @@
 # Test-Development Environment in Vagrant
 A Vagrant based virtual environment for the Springmvc-Shoppingcart demo application (Alten Java for Testers programme).
 
+## Todo
+- [ ] Add Sonarcube
+- [ ] 1st time config of Jenkins
+- [ ] Add Postman
+
+
 # Instructions for getting started with Vagrant
 ## Prerequisites
 - Oracle VirtualBox https://www.virtualbox.org/
@@ -27,3 +33,4 @@ A Vagrant based virtual environment for the Springmvc-Shoppingcart demo applicat
 
 ## Support 
 - In case of any questions or concerns regarding this VM please contact eric.de.graaf@alten.nl
+
