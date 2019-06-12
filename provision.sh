@@ -3,7 +3,7 @@ set -e
 export HOME=/home/vagrant
 export IDEA_IC_VERSION=ideaIC-2018.3.2
 export SET_VAGRANT_AS_OWNER="sudo chown -R vagrant:vagrant /home/vagrant"
-export TOMCAT_VERSION=8.5.40
+export TOMCAT_VERSION=8.5.42
 export TOMCAT_DL_URL=http://apache.proserve.nl/tomcat/tomcat-8/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
 export CHROME_PACKAGE=google-chrome-stable_current_amd64.deb
 export GIT_BASE_URL=https://github.com/AltenIT
@@ -57,7 +57,7 @@ cd ~
 
 # Install API test #
 if [[ -d ./$APITEST_NAME ]]; then
-	echo "Remove old dir in image. " + $APITEST_NAME 
+	echo "Remove old dir in image. " $APITEST_NAME 
 	rm -rf $APITEST_NAME
 fi
 git clone $APITEST_GIT_URL && cd $APITEST_NAME
@@ -66,7 +66,7 @@ cd ~
 
 # Install GUI test #
 if [[ -d ./$GUITEST_NAME ]]; then
-	echo "Remove old dir in image. " + $GUITEST_NAME
+	echo "Remove old dir in image. " $GUITEST_NAME
 	rm -rf $GUITEST_NAME
 fi
 git clone $GUITEST_GIT_URL && cd $GUITEST_NAME
