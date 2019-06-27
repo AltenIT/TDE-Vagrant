@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
 set -e
 export HOME=/home/vagrant
+export DEPLOY_IDE=false
+# dependency and sw versions
+export JUNIT_VERSION=4.13-beta-3
+export HAMCREST_VERSION=1.3
 export IDEA_IC_VERSION=ideaIC-2018.3.2
-export SET_VAGRANT_AS_OWNER="sudo chown -R vagrant:vagrant /home/vagrant"
 export TOMCAT_VERSION=8.5.42
+# dl urls
 export TOMCAT_DL_URL=http://apache.proserve.nl/tomcat/tomcat-8/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
+export CATALINA_HOME=$HOME/Apps/apache-tomcat-$TOMCAT_VERSION
+export POSTMAN_DL_URL=https://dl.pstmn.io/download/latest/linux64
 export CHROME_PACKAGE=google-chrome-stable_current_amd64.deb
 export GIT_BASE_URL=https://github.com/AltenIT
 export SUT_NAME=springmvc-shoppingcart-sample
@@ -14,7 +20,8 @@ export GUITEST_NAME=SeleniumBDD
 export SUT_GIT_URL=$GIT_BASE_URL/$SUT_NAME.git
 export APITEST_GIT_URL=$GIT_BASE_URL/$APITEST_NAME.git
 export GUITEST_GIT_URL=$GIT_BASE_URL/$GUITEST_NAME.git
-export DEPLOY_IDE=false
+#commands
+export SET_VAGRANT_AS_OWNER="sudo chown -R vagrant:vagrant /home/vagrant"
 
 echo provisioning the Virtual machine
 
@@ -96,7 +103,6 @@ if [[ ! -d ./$TOMCAT_VERSION ]]; then
 		fi
 		tar xzf apache-tomcat-$TOMCAT_VERSION.tar.gz
 fi
-export CATALINA_HOME=$HOME/Apps/apache-tomcat-$TOMCAT_VERSION
 cd ~
 
 #Jenkins
@@ -151,8 +157,30 @@ echo -e "[Desktop Entry]\n" \
 chmod +x ~/Desktop/Start-$SUT_NAME.desktop
 
 cp -r /root/.m2 /home/vagrant
-
 $SET_VAGRANT_AS_OWNER
 
+if [[ ! -d $HOME/Apps/Postman ]]; then
+	echo @@@ Deploy Postman @@@
+	cd ~/Downloads && wget -q -O postman.tar.gz $POSTMAN_DL_URL && tar xzf postman.tar.gz 
+	$SET_VAGRANT_AS_OWNER
+	mv ~/Downloads/Postman ~/Apps
+	ln -s ~/Apps/Postman/app/Postman ~/Desktop/Postman
+fi 
 
+echo @@@ Junit and Hamcrest Libs, set .bash_profile @@@
 
+echo -e "export CLASSPATH=$CLASSPATH:$HOME/Libs/hamcrest-core-1.3.jar:$HOME/Libs/junit-4.13-beta-3.jar" > ~/.bash_profile
+
+if [[ ! -d ~/Libs ]]; then
+		echo "Create Libs directory"
+		mkdir ~/Libs
+fi
+cd ~/Libs
+if [[ ! -f hamcrest-core-$HAMCREST_VERSION.jar ]]; then
+	wget -q https://repo1.maven.org/maven2/org/hamcrest/hamcrest-core/$HAMCREST_VERSION/hamcrest-core-$HAMCREST_VERSION.jar
+fi
+if [[ ! -f junit-$JUNIT_VERSION.jar ]]; then
+	wget -q https://repo1.maven.org/maven2/junit/junit/$JUNIT_VERSION/junit-$JUNIT_VERSION.jar
+fi
+cd ~
+$SET_VAGRANT_AS_OWNER

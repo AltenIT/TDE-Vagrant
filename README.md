@@ -5,6 +5,7 @@ A Vagrant based virtual environment for the Springmvc-Shoppingcart demo applicat
 - [ ] Add Sonarcube
 - [ ] 1st time config of Jenkins
 - [ ] Add Postman
+- [ ] Show desktop icons (gsettings set org.gnome.desktop.background show-desktop-icons true)
 
 
 # Instructions for getting started with Vagrant
