@@ -2,6 +2,8 @@
 A Vagrant based virtual environment for the Springmvc-Shoppingcart demo application (Alten Java for Testers programme).
 
 ## Todo
+- [ ] Change from Debian to Ubuntu
+- [ ] Add docker support to image
 - [ ] Add Sonarcube
 - [ ] 1st time config of Jenkins
 - [ ] Add Postman
