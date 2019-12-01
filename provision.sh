@@ -6,7 +6,7 @@ export DEPLOY_IDE=true
 export JUNIT_VERSION=4.13-beta-3
 export HAMCREST_VERSION=1.3
 export IDEA_IC_VERSION=ideaIC-2018.3.2
-export TOMCAT_VERSION=8.5.42
+export TOMCAT_VERSION=8.5.49
 # dl urls
 export TOMCAT_DL_URL=http://apache.proserve.nl/tomcat/tomcat-8/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
 export CATALINA_HOME=$HOME/Apps/apache-tomcat-$TOMCAT_VERSION
@@ -85,6 +85,7 @@ $SET_VAGRANT_AS_OWNER
 # Install Chrome
 if [[ ! -d ~/Downloads ]]; then
 	mkdir ~/Downloads
+	mkdir ~/Desktop #Ubuntu creates user home folders too late, so create them on forehand
 fi
 cd ~/Downloads
 
@@ -103,6 +104,7 @@ cd ~/Apps
 if [[ ! -d ./$TOMCAT_VERSION ]]; then
 		echo "Create Tomcat directory"
 		if [[ ! -f apache-tomcat-$TOMCAT_VERSION.tar.gz ]]; then
+			echo "Tomcat not found, dl version ${TOMCAT_VERSION}"
 			wget -q $TOMCAT_DL_URL
 		fi
 		tar xzf apache-tomcat-$TOMCAT_VERSION.tar.gz
