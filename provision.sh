@@ -142,6 +142,7 @@ if [[ $DEPLOY_IDE ]]; then
 	    "StartupNotify=true" > ~/Desktop/Idea.desktop
 	fi
 fi
+chmod +x ~/Desktop/Idea.desktop
 cd ~ 
 
 echo -e "#!/bin/sh\n" \
