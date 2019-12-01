@@ -6,7 +6,7 @@ A Vagrant based virtual environment for the Springmvc-Shoppingcart demo applicat
 - [ ] Add docker support to image
 - [ ] Add Sonarcube
 - [ ] 1st time config of Jenkins
-- [ ] Add Postman
+- [x] Add Postman
 - [x] Show desktop icons
 
 
