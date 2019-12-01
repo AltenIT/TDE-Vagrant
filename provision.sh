@@ -25,30 +25,13 @@ export SET_VAGRANT_AS_OWNER="sudo chown -R vagrant:vagrant /home/vagrant"
 
 echo provisioning the Virtual machine
 
-# echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" | sudo tee /etc/apt/sources.list.d/webupd8team-java.list
-# echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" | sudo tee -a /etc/apt/sources.list.d/webupd8team-java.list
-# echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
-# echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
-# apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
-
-# echo  Remove original sources list and provide own
-# rm /etc/apt/sources.list
-
-# echo -e "deb http://http.debian.net/debian jessie main\n" \
-#     "deb-src http://http.debian.net/debian jessie main\n" \
-#     "deb http://security.debian.org/ jessie/updates main contrib\n" \
-#     "deb-src http://security.debian.org/ jessie/updates main contrib" > /etc/apt/sources.list
-
-apt-get update
-apt-get install -y build-essential
-apt-get install -y libmysqlclient-dev
-apt-get install -y git
-# apt-get install -y firefox-esr
-apt-get install -y openjdk-8-jdk
-# apt-get install -y oracle-java8-set-default
-apt-get install -y maven
-# apt-get install -y libappindicator3-1 
-
+apt update
+apt install -y build-essential
+apt install -y libmysqlclient-dev
+apt install -y git
+apt install -y openjdk-8-jdk
+apt install -y maven
+apt install -y libgconf2-4
 
 echo @@@ Deploy SUT @@@
 cd $HOME
