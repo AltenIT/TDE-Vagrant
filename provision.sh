@@ -83,7 +83,7 @@ cd ~
 $SET_VAGRANT_AS_OWNER
 
 # Install Chrome
-if [[ -d ~/Downloads ]]; then
+if [[ ! -d ~/Downloads ]]; then
 	mkdir ~/Downloads
 fi
 cd ~/Downloads
