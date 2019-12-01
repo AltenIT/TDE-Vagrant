@@ -2,12 +2,12 @@
 A Vagrant based virtual environment for the Springmvc-Shoppingcart demo application (Alten Java for Testers programme).
 
 ## Todo
-- [ ] Change from Debian to Ubuntu
+- [x] Change from Debian to Ubuntu
 - [ ] Add docker support to image
 - [ ] Add Sonarcube
 - [ ] 1st time config of Jenkins
 - [ ] Add Postman
-- [ ] Show desktop icons (gsettings set org.gnome.desktop.background show-desktop-icons true)
+- [x] Show desktop icons
 
 
 # Instructions for getting started with Vagrant
