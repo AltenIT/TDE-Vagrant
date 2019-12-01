@@ -18,6 +18,6 @@ end
 #     s.inline = "echo hello"
 #   end
 # end
-# Vagrant.configure("2") do | config |
-#   config.vm.provision "provision", type: "shell", path: "provision.sh"  
-# end
+Vagrant.configure("2") do | config |
+  config.vm.provision "provision", type: "shell", path: "provision.sh"  
+end
