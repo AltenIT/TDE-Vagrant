@@ -6,7 +6,7 @@ export DEPLOY_IDE=true
 export JUNIT_VERSION=4.13-beta-3
 export HAMCREST_VERSION=1.3
 export IDEA_IC_VERSION=ideaIC-2018.3.2
-export TOMCAT_VERSION=8.5.49
+export TOMCAT_VERSION=8.5.50
 # dl urls
 export TOMCAT_DL_URL=http://apache.proserve.nl/tomcat/tomcat-8/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
 export CATALINA_HOME=$HOME/Apps/apache-tomcat-$TOMCAT_VERSION
@@ -32,6 +32,8 @@ apt install -y git
 apt install -y openjdk-8-jdk
 apt install -y maven
 apt install -y libgconf2-4
+apt install -y gnome-session-flashback
+apt install -y tigervnc-standalone-server
 
 echo @@@ Deploy SUT @@@
 cd $HOME
