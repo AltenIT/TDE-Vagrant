@@ -15,8 +15,8 @@ Vagrant.configure("2") do |config|
         test_dev_vm.vm.box = "peru/ubuntu-18.04-desktop-amd64"
     end
     config.vm.provision "shell", path: "./provision-base.sh" #do not remove base!
-    #config.vm.provision "shell", path: "./provision-tomcat-jenkins.sh"
+    config.vm.provision "shell", path: "./provision-tomcat-jenkins.sh"
 	config.vm.provision "shell", path: "./provision-idea.sh"
-    #config.vm.provision "shell", path: "./provision-misc.sh"
+    config.vm.provision "shell", path: "./provision-misc.sh"
 end
 

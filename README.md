@@ -3,7 +3,7 @@ A Vagrant based virtual environment for the Springmvc-Shoppingcart demo applicat
 
 ## Todo
 - [x] Change from Debian to Ubuntu
-- [ ] Add docker support to image
+- [x] Add docker support to image
 - [ ] Add Sonarcube
 - [ ] 1st time config of Jenkins
 - [x] Add Postman

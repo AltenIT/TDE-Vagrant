@@ -29,7 +29,7 @@ if ($DEPLOY_IDE); then
 	    "Type=Application\n" \
 	    "Icon=/home/vagrant/Downloads/ideaic/bin/idea.png\n" \
 	    "Categories=Programming;IDE;\n" \
-	    "StartupNotify=true" > ~/Desktop/IdeaIC.desktop
+	    "StartupNotify=true" > ~/Desktop/Idea.desktop
 	chmod +x ~/Desktop/Idea.desktop
 fi
 cd ~ && $SET_VAGRANT_AS_OWNER

@@ -28,6 +28,10 @@ apt install -y tigervnc-standalone-server
 apt install -y mc
 apt install -y curl
 apt install -y gawk
+apt install -y docker.io
+
+# add vagrant to docker group
+usermod -G docker vagrant
 
 #Ubuntu creates user home folders too late, so create them on forehand
 if [[ ! -d ~/Downloads ]]; then
