@@ -11,12 +11,12 @@
 #   end
 # end
 Vagrant.configure("2") do |config|
-    config.vm.define :test_vm do |test_vm|
-        test_vm.vm.box = "peru/ubuntu-18.04-desktop-amd64"
-        test_vm.vm.provision "provision", type: "shell", path: "provision.sh"
+    config.vm.define :test_dev_vm do |test_dev_vm|
+        test_dev_vm.vm.box = "peru/ubuntu-18.04-desktop-amd64"
     end
+    config.vm.provision "shell", path: "./provision-base.sh" #do not remove base!
+    #config.vm.provision "shell", path: "./provision-tomcat-jenkins.sh"
+	config.vm.provision "shell", path: "./provision-idea.sh"
+    #config.vm.provision "shell", path: "./provision-misc.sh"
 end
 
-# Vagrant.configure("2") do | config |
-#   config.vm.provision "provision", type: "shell", path: "provision.sh"  
-# end
